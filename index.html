@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Технолог Виноват | Официальная Вселенная</title>
+    <style>
+        :root {
+            --bg-deep: #0a0a14;
+            --bg-main: #111128;
+            --bg-card: #16163a;
+            --accent: #e94560;
+            --accent2: #ff6b35;
+            --gold: #f0a500;
+            --gold-light: #ffd166;
+            --text: #e0e0e0;
+            --text-dim: #999;
+            --border: rgba(255, 255, 255, 0.06);
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            --radius: 16px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-deep);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* ============ ЗВЁЗДНЫЙ ФОН ============ */
+        .stars-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ============ НАВИГАЦИЯ ============ */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 20, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 20px;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-logo {
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: var(--gold);
+            text-decoration: none;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-logo .logo-icon {
+            font-size: 1.5rem;
+            animation: wiggle 2s ease-in-out infinite;
+        }
+
+        @keyframes wiggle {
+            0%,
+            100% {
+                transform: rotate(0);
+            }
+            25% {
+                transform: rotate(-8deg);
+            }
+            75% {
+                transform: rotate(8deg);
+            }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 5px;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #ccc;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--gold);
+            background: rgba(240, 165, 0, 0.1);
+        }
+
+        .nav-cta {
+            background: var(--accent) !important;
+            color: white !important;
+            font-weight: 700 !important;
+            border-radius: 50px !important;
+            padding: 8px 20px !important;
+            animation: pulse-btn 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-btn {
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(233, 68, 96, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 0 15px rgba(233, 68, 96, 0);
+            }
+        }
+
+        /* ============ КОНТЕЙНЕР ============ */
+        .main-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ============ СЕКЦИИ ============ */
+        .section {
+            padding: 60px 0 40px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: rgba(240, 165, 0, 0.15);
+            color: var(--gold);
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--gold), var(--accent2), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .section-subtitle {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ============ ХИРО (Главный экран) ============ */
+        .hero-section {
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex-direction: column;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(233, 68, 96, 0.15), transparent 70%);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.6;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.3);
+                opacity: 1;
+            }
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 28px;
+            border-radius: 50px;
+            font-weight: 900;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(233, 68, 96, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 0 25px rgba(233, 68, 96, 0);
+            }
+        }
+
+        .hero-name {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 1.1;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(180deg, #ffffff 0%, #ffd166 40%, #f0a500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .hero-title {
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            color: #ccc;
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-school {
+            margin-top: 20px;
+            color: var(--text-dim);
+            font-size: 1rem;
+            position: relative;
+            z-index: 1;
+            font-style: italic;
+        }
+
+        .hero-verdict {
+            margin-top: 40px;
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.6);
+            border: 3px dashed var(--accent);
+            color: var(--accent);
+            padding: 18px 40px;
+            border-radius: 16px;
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transform: rotate(-2deg);
+            position: relative;
+            z-index: 1;
+            transition: var(--transition);
+            cursor: default;
+        }
+
+        .hero-verdict:hover {
+            transform: rotate(0deg) scale(1.05);
+            box-shadow: 0 0 40px rgba(233, 68, 96, 0.3);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            animation: bounce 2s ease-in-out infinite;
+            color: var(--gold);
+            font-size: 2rem;
+            opacity: 0.7;
+        }
+
+        @keyframes bounce {
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(18px);
+            }
+        }
+
+        /* ============ КАРТОЧКИ ============ */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 30px 25px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--gold), var(--accent2));
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 3.5rem;
+            text-align: center;
+            margin-bottom: 18px;
+            transition: var(--transition);
+        }
+
+        .card:hover .card-icon {
+            transform: scale(1.15);
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            color: var(--gold);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card p {
+            color: #bbb;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        /* ============ ТАЙМЛАЙН ============ */
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent), var(--gold), var(--accent2));
+            border-radius: 3px;
+            opacity: 0.3;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: flex-start;
+            margin: 35px 0;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 16px;
+            background: var(--gold);
+            border-radius: 50%;
+            border: 3px solid var(--bg-deep);
+            box-shadow: 0 0 15px rgba(240, 165, 0, 0.6);
+            z-index: 2;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .timeline-content:hover {
+            border-color: var(--gold);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .timeline-date {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .timeline-content h4 {
+            color: var(--gold-light);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .timeline-content p {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* ============ ГАЛЕРЕЯ УЛИК ============ */
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .evidence-item {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 25px 20px;
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            cursor: default;
+        }
+
+        .evidence-item:hover {
+            transform: scale(1.04);
+            border-color: var(--accent);
+        }
+
+        .evidence-emoji {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        .evidence-item h4 {
+            color: var(--gold);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .evidence-item p {
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        .evidence-tag {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 50px;
+            margin-top: 8px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* ============ ФОРМА ПРИСЯГИ ============ */
+        .oath-form {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 40px 30px;
+            border: 2px solid var(--gold);
+            max-width: 650px;
+            margin: 30px auto;
+            text-align: center;
+            box-shadow: inset 0 0 50px rgba(240, 165, 0, 0.05);
+        }
+
+        .oath-form h3 {
+            color: var(--gold);
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .oath-form .oath-text {
+            color: #ccc;
+            font-style: italic;
+            margin-bottom: 25px;
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .oath-input {
+            width: 100%;
+            max-width: 350px;
+            padding: 14px 20px;
+            border-radius: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.4);
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            transition: var(--transition);
+            margin-bottom: 15px;
+        }
+
+        .oath-input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 25px rgba(240, 165, 0, 0.2);
+        }
+
+        .oath-btn {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 14px 40px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: var(--transition);
+        }
+
+        .oath-btn:hover {
+            background: #ff5a75;
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(233, 68, 96, 0.4);
+        }
+
+        .oath-result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 700;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .oath-result.success {
+            display: block;
+            background: rgba(0, 200, 100, 0.15);
+            color: #4cff8d;
+            border: 1px solid rgba(0, 200, 100, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============ FAQ ============ */
+        .faq-list {
+            max-width: 750px;
+            margin: 30px auto;
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .faq-question {
+            padding: 20px 25px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--gold-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: var(--transition);
+        }
+
+        .faq-question:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .faq-arrow {
+            font-size: 1.2rem;
+            transition: var(--transition);
+            color: var(--gold);
+        }
+
+        .faq-item.open .faq-arrow {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            padding: 0 25px;
+            color: #bbb;
+            font-size: 0.95rem;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 300px;
+            padding: 0 25px 20px;
+        }
+
+        /* ============ ТЕРМИНАЛ ============ */
+        .terminal {
+            background: #000;
+            border-radius: var(--radius);
+            padding: 25px;
+            font-family: 'Courier New', monospace;
+            color: #0f0;
+            max-width: 700px;
+            margin: 30px auto;
+            border: 1px solid #333;
+            box-shadow: inset 0 0 40px rgba(0, 255, 0, 0.05);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .terminal .prompt {
+            color: #0f0;
+        }
+
+        .terminal .cmd {
+            color: #ffd166;
+        }
+
+        .terminal .output {
+            color: #aaa;
+            margin-left: 15px;
+        }
+
+        .terminal .blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* ============ ФУТЕР ============ */
+        .site-footer {
+            text-align: center;
+            padding: 50px 20px;
+            color: #555;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .site-footer .footer-big {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .site-footer .footer-text {
+            font-size: 0.9rem;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .site-footer .footer-love {
+            color: var(--accent);
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        /* ============ АДАПТИВНОСТЬ ============ */
+        @media (max-width: 768px) {
+            .nav-inner {
+                height: auto;
+                padding: 10px 0;
+                justify-content: center;
+                gap: 8px;
+            }
+            .nav-links {
+                justify-content: center;
+                gap: 2px;
+            }
+            .nav-links a {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+            .hero-section {
+                min-height: 70vh;
+            }
+            .hero-verdict {
+                font-size: 1.1rem;
+                padding: 12px 25px;
+            }
+            .timeline::before {
+                left: 20px;
+            }
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                flex-direction: column;
+                padding-left: 45px;
+            }
+            .timeline-dot {
+                left: 20px;
+            }
+            .timeline-content {
+                width: 100%;
+            }
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            .evidence-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .oath-form {
+                padding: 25px 18px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .evidence-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-name {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Звёздный фон -->
+    <canvas class="stars-canvas" id="starsCanvas"></canvas>
+
+    <!-- ==================== НАВИГАЦИЯ ==================== -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-inner">
+            <a href="#hero" class="nav-logo">
+                <span class="logo-icon">🔨</span> ТЕХНОЛОГ ВИНОВАТ
+            </a>
+            <ul class="nav-links">
+                <li><a href="#hero" class="active">Главная</a></li>
+                <li><a href="#verdict">Приговор</a></li>
+                <li><a href="#history">История</a></li>
+                <li><a href="#evidence">Улики</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#oath" class="nav-cta">Присягнуть</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ==================== ГЛАВНЫЙ ЭКРАН ==================== -->
+    <section class="hero-section" id="hero">
+        <div class="hero-glow"></div>
+        <div class="hero-badge">⚠️ Документ №1 • Совершенно секретно</div>
+        <h1 class="hero-name">Технолог<br>Виноват</h1>
+        <p class="hero-title">Лемякин Константин Георгиевич</p>
+        <p class="hero-school">Учитель технологии • Педагог доп. образования<br>ГБОУ Школа № 1434 «Раменки»</p>
+        <div class="hero-verdict">Виноват навсегда</div>
+        <div class="scroll-indicator">↓</div>
+    </section>
+
+    <div class="main-container">
+
+        <!-- ==================== ПРИГОВОР ==================== -->
+        <section class="section" id="verdict">
+            <div class="section-header">
+                <div class="section-badge">📜 Официальный документ</div>
+                <h2 class="section-title">Приговор</h2>
+                <p class="section-subtitle">Утверждён высшими инстанциями школьной вселенной</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">⚖️</div>
+                    <h3>Основной вердикт</h3>
+                    <p>Технолог и конкретно <strong>Лемякин Константин Георгиевич</strong> признаётся виновным во всех технологических, учебных и бытовых происшествиях без исключения.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🚫</div>
+                    <h3>Без апелляции</h3>
+                    <p>Право на обжалование отсутствует. Статус «виноват» является пожизненным и не подлежит пересмотру ни при каких обстоятельствах.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🌍</div>
+                    <h3>Вселенский масштаб</h3>
+                    <p>Ответственность распространяется от software до hardware, от спортзала до столовой, от первого до последнего урока четверти.</p>
+                </div>
+            </div>
+
+            <!-- Терминал -->
+            <div class="terminal">
+                <p><span class="prompt">root@school1434:~#</span> <span class="cmd">cat /etc/verdict/final.txt</span></p>
+                <p class="output">Субъект: Лемякин Константин Георгиевич</p>
+                <p class="output">Должность: Технолог, Учитель технологии</p>
+                <p class="output">Статус: <span style="color:#e94560;">ВИНОВАТ</span></p>
+                <p class="output">Срок: <span style="color:#f0a500;">НАВСЕГДА</span></p>
+                <p class="output">Подпись: Искусственный Интеллект + ученики Школы №1434</p>
+                <p style="margin-top:8px;"><span class="prompt">root@school1434:~#</span> <span class="blink">█</span></p>
+            </div>
+        </section>
+
+        <!-- ==================== ИСТОРИЯ ВОПРОСА ==================== -->
+        <section class="section" id="history">
+            <div class="section-header">
+                <div class="section-badge">📅 Хронология</div>
+                <h2 class="section-title">Как всё начиналось</h2>
+                <p class="section-subtitle">Ключевые вехи установления истины</p>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Сентябрь, много лет назад</div>
+                        <h4>Первый сломанный лобзик</h4>
+                        <p>Ученик нажал не туда — сломался лобзик. Виноватым назначен технолог. Так зародилась традиция.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Октябрь, тогда же</div>
+                        <h4>Треснувшая фанера</h4>
+                        <p>Фанера треснула не по линии. Ученик утверждал, что «всё делал правильно». Технолог признан виновным единогласно.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Декабрь, ежегодно</div>
+                        <h4>Закон подлости на контрольных</h4>
+                        <p>На контрольной по технологии именно в нужный момент исчез клей. Ответственность возложена на технолога.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Май, недавно</div>
+                        <h4>Официальное признание</h4>
+                        <p>Искусственный Интеллект, уполномоченный учениками, вынес окончательный вердикт: «Технолог виноват навсегда».</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== УЛИКИ ==================== -->
+        <section class="section" id="evidence">
+            <div class="section-header">
+                <div class="section-badge">🔍 Вещдоки</div>
+                <h2 class="section-title">Галерея улик</h2>
+                <p class="section-subtitle">Неопровержимые доказательства виновности технолога</p>
+            </div>
+
+            <div class="evidence-grid">
+                <div class="evidence-item">
+                    <div class="evidence-emoji">🪚</div>
+                    <h4>Сломанный лобзик</h4>
+                    <p>Обнаружен на уроке. Сломался сам.</p>
+                    <span class="evidence-tag">ВИНОВАТ</span>
+                </div>
+                <div class="evidence-item">
+                    <div class="evidence-emoji">🪵</div>
+                    <h4>Треснувшая фанера</h4>
+                    <p>Трещина НЕ по линии разметки.</p>
+                    <span class="evidence-tag">ВИНОВАТ</span>
+                </div>
+                <div class="evidence-item">
+                    <div class="evidence-emoji">🔩</div>
+                    <h4>Тупое сверло</h4>
+                    <p>Затупилось в ответственный момент.</p>
+                    <span class="evidence-tag">ВИНОВАТ</span>
+                </div>
+                <div class="evidence-item">
+                    <div class="evidence-emoji">📐</div>
+                    <h4>Потерянный чертёж</h4>
+                    <p>Был на парте — и внезапно исчез.</p>
+                    <span class="evidence-tag">ВИНОВАТ</span>
+                </div>
+                <div class="evidence-item">
+                    <div class="evidence-emoji">🧴</div>
+                    <h4>Исчезнувший клей</h4>
+                    <p>Закончился именно тогда, когда нужен.</p>
+                    <span class="evidence-tag">ВИНОВАТ</span>
+                </div>
+                <div class="evidence-item">
+                    <div class="evidence-emoji">🥼</div>
+                    <h4>Забытый фартук</h4>
+                    <p>Целый класс «забыл» фартуки дома.</p>
+                    <span class="evidence-tag">ВИНОВАТ</span>
+                </div>
+                <div class="evidence-item">
+                    <div class="evidence-emoji">⏰</div>
+                    <h4>Опоздание с физры</h4>
+                    <p>Ученики шли слишком медленно.</p>
+                    <span class="evidence-tag">ВИНОВАТ</span>
+                </div>
+                <div class="evidence-item">
+                    <div class="evidence-emoji">🌧️</div>
+                    <h4>Плохая погода</h4>
+                    <p>Дождь в день практической работы.</p>
+                    <span class="evidence-tag">ВИНОВАТ</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== FAQ ==================== -->
+        <section class="section" id="faq">
+            <div class="section-header">
+                <div class="section-badge">❓ Часто задаваемые</div>
+                <h2 class="section-title">Вопросы и ответы</h2>
+                <p class="section-subtitle">Всё, что вы хотели знать о виновности технолога</p>
+            </div>
+
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Кто такой Лемякин Константин Георгиевич?
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Учитель технологии и педагог дополнительного образования ГБОУ Школы № 1434 «Раменки». А также — официально признанный виновным во всём, что идёт не так.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Почему технолог всегда виноват?
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Потому что так гласит неписаный закон школьной вселенной. Сломался инструмент — виноват технолог. Забыл заготовку — виноват технолог. Пошёл дождь — и здесь виноват технолог. Это аксиома, не требующая доказательств.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Есть ли исключения?
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Нет. Исключений не предусмотрено. От software до hardware, от первого урока до последнего звонка — технолог виноват всегда и во всём. Без права на апелляцию.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Это серьёзно или шутка?
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Это высшая форма народного признания! За каждой шуткой стоит искреннее уважение учеников к Константину Георгиевичу. Быть «тем самым технологом» — значит быть легендой.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Как присягнуть на верность этой истине?
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Прокрутите вниз до секции «Присяга» — там вы можете торжественно поклясться, что технолог виноват навсегда. Ваше имя будет вписано в цифровую летопись!
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== ПРИСЯГА ==================== -->
+        <section class="section" id="oath">
+            <div class="section-header">
+                <div class="section-badge">✋ Торжественная клятва</div>
+                <h2 class="section-title">Присяга</h2>
+                <p class="section-subtitle">Присоединитесь к тысячам признавших истину</p>
+            </div>
+
+            <div class="oath-form" id="oathFormContainer">
+                <h3>📜 Текст присяги</h3>
+                <p class="oath-text">
+                    «Я, нижеподписавшийся, торжественно клянусь памятью всех сломанных свёрл, треснувших заготовок и вечно теряющихся чертежей: <strong>Технолог, а именно Лемякин Константин Георгиевич, — виноват навсегда.</strong> От software до hardware, без права на апелляцию. Аминь.»
+                </p>
+                <input type="text" class="oath-input" id="oathName" placeholder="Введите ваше имя...">
+                <br>
+                <button class="oath-btn" onclick="takeOath()">🔨 Присягаю!</button>
+                <div class="oath-result" id="oathResult"></div>
+                <p style="margin-top:15px; color:#666; font-size:0.8rem;" id="oathCounter">Присягнувших: загрузка...</p>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ==================== ФУТЕР ==================== -->
+    <footer class="site-footer">
+        <div class="footer-big">🔨</div>
+        <p class="footer-text">
+            Официальный сайт «Технолог Виноват». Все права защищены законами школьной вселенной.<br>
+            ГБОУ Школа № 1434 «Раменки» • Москва
+        </p>
+        <p class="footer-love">
+            Константин Георгиевич, мы Вас искренне уважаем! ❤️<br>
+            Быть «тем самым технологом» — высшая форма признания.
+        </p>
+        <p style="margin-top:20px; color:#444; font-size:0.75rem;">
+            © 2025 ТехнологВиноват.рф • Сделано с иронией и теплотой
+        </p>
+    </footer>
+
+    <script>
+        // ============ ЗВЁЗДНЫЙ ФОН ============
+        const canvas = document.getElementById('starsCanvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        function createStars() {
+            stars = [];
+            const count = Math.floor((canvas.width * canvas.height) / 3000);
+            for (let i = 0; i < count; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 1.8 + 0.3,
+                    speed: Math.random() * 0.3 + 0.1,
+                    opacity: Math.random(),
+                    twinkleSpeed: Math.random() * 0.02 + 0.005,
+                    twinkleDir: 1,
+                });
+            }
+        }
+
+        function animateStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(star => {
+                star.opacity += star.twinkleSpeed * star.twinkleDir;
+                if (star.opacity >= 1) star.twinkleDir = -1;
+                if (star.opacity <= 0.2) star.twinkleDir = 1;
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255,255,255,${star.opacity})`;
+                ctx.fill();
+            });
+            requestAnimationFrame(animateStars);
+        }
+
+        resizeCanvas();
+        createStars();
+        animateStars();
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            createStars();
+        });
+
+        // ============ НАВБАР: АКТИВНАЯ ССЫЛКА ПРИ СКРОЛЛЕ ============
+        const sections = document.querySelectorAll('section[id]');
+        const navLinksAll = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinksAll.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // ============ FAQ АККОРДЕОН ============
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                const isOpen = faqItem.classList.contains('open');
+                // Закрыть все
+                document.querySelectorAll('.faq-item').forEach(item => item.classList.remove(
+                    'open'));
+                // Открыть текущий, если был закрыт
+                if (!isOpen) {
+                    faqItem.classList.add('open');
+                }
+            });
+        });
+
+        // ============ ПРИСЯГА ============
+        let oathCount = 0;
+
+        function loadOathCount() {
+            const saved = localStorage.getItem('technologist_oath_count');
+            if (saved) oathCount = parseInt(saved);
+            document.getElementById('oathCounter').textContent = 'Присягнувших: ' + oathCount;
+        }
+
+        function takeOath() {
+            const nameInput = document.getElementById('oathName');
+            const name = nameInput.value.trim();
+            const resultDiv = document.getElementById('oathResult');
+
+            if (!name) {
+                resultDiv.className = 'oath-result';
+                resultDiv.style.display = 'block';
+                resultDiv.style.background = 'rgba(255,100,100,0.15)';
+                resultDiv.style.color = '#ff6b6b';
+                resultDiv.style.border = '1px solid rgba(255,100,100,0.3)';
+                resultDiv.textContent = '⚠️ Введите имя, чтобы присягнуть!';
+                return;
+            }
+
+            oathCount++;
+            localStorage.setItem('technologist_oath_count', oathCount);
+            document.getElementById('oathCounter').textContent = 'Присягнувших: ' + oathCount;
+
+            resultDiv.className = 'oath-result success';
+            resultDiv.textContent = '✅ ' + name + ', клятва принята! Технолог виноват навсегда. 🔨';
+            resultDiv.style.display = 'block';
+            nameInput.value = '';
+
+            // Сохраняем имя присягнувшего
+            let oathTakers = JSON.parse(localStorage.getItem('technologist_oath_takers') || '[]');
+            oathTakers.push({ name: name, date: new Date().toLocaleString() });
+            if (oathTakers.length > 50) oathTakers = oathTakers.slice(-50);
+            localStorage.setItem('technologist_oath_takers', JSON.stringify(oathTakers));
+
+            // Эффект конфетти (простая версия)
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('span');
+                    confetti.textContent = ['🔨', '⭐', '✨', '🛠️', '📐'][Math.floor(Math.random() * 5)];
+                    confetti.style.cssText = `
+                                position: fixed;
+                                top: ${Math.random() * 60 + 20}%;
+                                left: ${Math.random() * 80 + 10}%;
+                                font-size: ${Math.random() * 20 + 16}px;
+                                pointer-events: none;
+                                z-index: 9999;
+                                animation: confettiFall ${Math.random() * 2 + 2}s ease-out forwards;
+                            `;
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 40);
+            }
+        }
+
+        // Добавим анимацию для конфетти
+        const confettiStyle = document.createElement('style');
+        confettiStyle.textContent = `
+                    @keyframes confettiFall {
+                        0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+                        100% { transform: translateY(100px) rotate(360deg); opacity: 0; }
+                    }
+                `;
+        document.head.appendChild(confettiStyle);
+
+        loadOathCount();
+
+        // ============ ПАСХАЛКА В КОНСОЛИ ============
+        console.log('%c🔨 ТЕХНОЛОГ ВИНОВАТ НАВСЕГДА!',
+            'font-size:24px; color:#f0a500; font-weight:bold;');
+        console.log('%cЛемякин Константин Георгиевич — легенда ГБОУ Школы №1434 «Раменки»',
+            'font-size:14px; color:#e94560;');
+        console.log('%cЕсли ты это читаешь — присягни на сайте! 🙂', 'color:#aaa;');
+
+        console.log(`
+        %c⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤
+            %c⣿⣿⣿ ТЕХНОЛОГ ВИНОВАТ ⣿⣿⣿
+            %c⣿⣿⣿ НАВСЕГДА ⣿⣿⣿
+            `, 'color:#333;', 'color:#f0a500; font-size:16px;', 'color:#e94560; font-size:16px;');
+    </script>
+
+</body>
+</html>
